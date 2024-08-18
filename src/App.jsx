@@ -1,12 +1,46 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FormCreateTask } from "./components/form/FormCreateTask.jsx";
 import { ListActions } from "./components/list-actions/ListActions";
 import { TaskList } from "./components/task-list/TaskList";
-import { tasks } from "./data/tasks.js";
+// import { tasks } from "./data/tasks.js";
 
 function App() {
-  const [taskList, setTaskList] = useState(tasks);
-  const [id, setId] = useState(tasks.at(-1).id);
+  const storageDataKey = 'todo-data';
+  const storageIdKey = 'todo-last-id';
+  const [taskList, setTaskList] = useState(readLocalData());
+  const [id, setId] = useState(readLocalId());
+
+  useEffect(() => {
+    console.log('"APP" - atsinaujino taskList');
+  }, []);
+
+
+  useEffect(() => {
+    localStorage.setItem(storageDataKey, JSON.stringify(taskList));
+  }, [taskList]);
+
+  useEffect(() => {
+    localStorage.setItem(storageIdKey, JSON.stringify(id));
+  }, [id]);
+
+
+  function readLocalData() {
+    const localData = localStorage.getItem(storageDataKey);
+    if (localData) {
+      return JSON.parse(localData);
+    }
+
+    return [];
+  }
+  function readLocalId() {
+    const localData = localStorage.getItem(storageIdKey);
+    if (localData) {
+      return JSON.parse(localData);
+    };
+
+    return 0;
+  }
+
 
   function addTask(taskText, taskColor) {
     setTaskList(prev => [
@@ -47,6 +81,18 @@ function App() {
     setTaskList(prev => prev.filter(task => task.id !== id));
   }
 
+  window.addEventListener('keydown', (e) => {
+    console.log(e.key);
+  });
+
+  window.addEventListener('keyup', (e) => {
+    console.log(e.key);
+  });
+
+  window.addEventListener('keypress', (e) => {
+    console.log(e.key);
+  });
+
   return (
     <main>
       <h1>Todo</h1>
@@ -68,3 +114,4 @@ function App() {
 }
 
 export default App;
+

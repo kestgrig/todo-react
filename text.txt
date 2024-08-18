@@ -1,0 +1,294 @@
+// *Norint atskiru reiksmiu (total)*
+
+// const [winCount, setWinCount] = useState(0)
+//        *masyvas    *update      *default reiksme 0
+
+
+
+// *Norint sekti zaidimo istorija*
+
+// const [gameWinState, setGameWinState] = useState([]);
+//        *masyvas        *update             *default reiksme
+
+// function updateGameWinState(newState) {   *funkcija updateo (plius arba minus 1 - newState(parodo laimejimus arba praleimejimus))
+//   
+// if () {    -* daromas patikrinimas(pvz ar nera tarpu, ar tinka reiksmes ir pan)
+// }
+
+
+// setGameWinState(prev => ([...prev, newState])); *updateas (prev -buvusiu reiksmiu masyvas, ...prev - spread reiksmes(pasiimamos visos buvusios reiksmes))
+// }
+
+// updateGameWinState(1) - * iskvietimas laimejimai suskaiciuojami
+// updateGameWinState(-1) - * iskvietimas pralaimejimai suskaiciuojami
+
+
+
+/* paspaudus mygtuka sukuriamos naujos reiksmes(default masyvas tuscias) nauji elementai*
+
+
+function App() {
+  const [taskList, setTaskList] = useState([]);
+  const [id, setId] = useState(0);
+
+  function addTask(taskText, taskColor) {
+    setTaskList(prev => [
+      ...prev,
+      {
+        id: id + 1,
+        text: taskText,
+        color: taskColor,
+        state: 'todo',
+      },
+    ]);
+
+    setId(prev => prev + 1);
+  }
+*/
+
+
+
+
+/* sukuriamos atskyros reiksmes imant reiksmes is masyvo data.js faile(pirminiai duomenys)*
+
+function App() {
+  const [taskList, setTaskList] = useState(tasks);
+  const [id, setId] = useState(tasks.at(-1).id); 
+                            *is task.js failo saraso bandoma istraukti paskutine reiksme (.at(-1)) ir is paskutinio nario nuskaitoma id savybe
+
+  function addTask(taskText, taskColor) {
+    setTaskList(prev => [
+      ...prev,
+      {
+        id: id + 1,
+        text: taskText,
+        color: taskColor,
+        state: 'todo',
+      },
+    ]);
+
+    setId(prev => prev + 1);
+  }
+*/
+
+// *useEffect()- *hooks(react funkcija), susitvarkyti su asinchroniskais darbais (skaiaciavimai, rezultatai- kai info ateina ne vienodu laiku), padaro kad skaiciavimu nevienodas greitis neturetu itakos funkcijoms *
+// du arba vienas parametras // useEffect(() => {});
+
+// import { useState, useEffect } from "react"; * jie virsuj istraukiami is reacto bibliotekos
+
+
+/* funkcija be antro parametro *
+(pasileidzia kai ispiesiamas komponentas)
+(pasileidzia kai perpiesiamas komponentas)
+
+useEffect(() => {
+    console.log('ffasfsfsa');
+  });
+*/
+
+/* func + [] *
+antras parametras be reiksmiu(tuscias masyvas)
+pasileidzia tik pirma karta piesiant komponenta
+
+useEffect(() => {
+    console.log('"APP" - tuscias masyvas');
+  });
+*/
+
+
+/* func + [...] *
+antras parametras netuscias masyvas
+i ji ieina 'useState' parametrai, kuriu reiksmems kintant reikia paleisti sia funkcija'
+
+useEffect(() => {
+    console.log('"APP" - atsinaujino taskList');
+  }, [taskList]);
+*/
+
+
+/* atnaujinamas localStorage ( prirasius nauju reiksmiu ir padarius refresh islieka reiksme)*
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(taskList));
+  }, [taskList]);
+*/
+
+/*
+localStorage.setItem(storageKey, JSON.stringify(taskList));
+is local storage paimamas item (storageKey(raktas key value) - is const storageKey = 'todo-data'; JSON.stringify(taskList)-duomenys is JSON failo, value - taskListas)
+*/
+
+
+/* Padarius refresh viskas islieka. Istorija local storage saugoma, reiksmes imamos tolymesnes* -
+function App() {
+  const storageDataKey = 'todo-data'; -*data duomenu raktas
+  const storageIdKey = 'todo-last-id'; -*id duomenu raktas
+  const [taskList, setTaskList] = useState(readLocalData());
+                                            *funkcija readLocalData(nuskaitoma data is localStorage)
+  const [id, setId] = useState(readLocalId());
+                           *funkcija readLocalData (nuskaitoma id is localStorage)
+  useEffect(() => {   * pakeicia reiksmes localstorage, kai pasikeicia taskListas
+    localStorage.setItem(storageDataKey, JSON.stringify(taskList));
+  }, [taskList]);
+
+        *is local storage paimamas item (storageKey(raktas key value) - is const storageKey = 'todo-data'; JSON.stringify(taskList)-duomenys is JSON failo, value - taskListas)
+
+  useEffect(() => {  * pakeicia reiksmes localstorage, kai pasikeicia id 
+    localStorage.setItem(storageIdKey, JSON.stringify(id));
+  }, [id]);
+
+  function readLocalData() { -*funkcijos aprasancios veiksmus keiciant reiksmes taskliste data
+    const localData = localStorage.getItem(storageDataKey); -* sukuriama konstanta imant item is local storage (storageDataKey is sukurtos const to-do)
+    if (localData) { -* jei local data egzituoja (const localData)
+      return JSON.parse(localData); -* issispausdinami duomenys is localstorage atminties jei jie yra 
+    }
+    return [];  -* jei reiksmiu nera isspausdinamas tuscias masyvas
+  }
+
+  function readLocalId() { -*funkcijos aprasancios veiksmus keiciant id taskliste 
+    const localData = localStorage.getItem(storageIdKey); -* sukuriama konstanta imant id is local storage (storageIdKey is sukurtos const todo-last-id)
+    if (localData) {  -* jei local data egzituoja (const localData)
+      return JSON.parse(localData);  -* issispausdinami duomenys is localstorage atminties jei jie yra 
+    };
+
+    return 0;  -* jei reiksmiu nera grazinama default reiksme (0) pati pirma karta paleidus
+  }
+*/
+
+
+//*Mygtuko darymas(keyboard click)*/
+
+//App.js faile eventListener
+//window - stebejimas ekrano kas jame daroma
+//norint patikrinti ar mygtukai dvigubinasi del Strict, tiesiog istrinti main.jsx faile Strict
+/*
+  window.addEventListener('keydown', (e) => { kkkkkkkkkkkk(kai laikai paspaudus)
+    if (e.key === 'w') -*e key yra raide w tada daromas toks veiksmas
+  console.log(e.key);
+  });
+
+  window.addEventListener('keyup', (e) => { k kai atleidi suveikia) traukia is window e reiksme kurioje mygtukas
+    console.log(e.key);
+  }); naudoti zaidime
+
+  window.addEventListener('keypress', (e) => {k kai ispaudi veikia)
+    console.log(e.key);
+  });
+*/
+
+
+/*Mygtuko paspaudimas(paspaudus padaryta ekrane mygtuka rasosi mygtuko reiksme)*
+
+function Button(props) {  - *funkcija Button.jsx faile(props-parametrai)
+    const {text, clickHandler} = props; -*isdestrukturizuojamas text is propso ir clickHandler.
+
+    return (
+        <button onClick={() => clickHandler(text)}>{text}</button>
+                        reikalingas text parametras| atvaizduojamas tekstas {text}
+    );
+}
+
+<Button key={index} text="g" clickHandler={()=>{}}> -*tevas duoda index rakta ir text priskirta reiksme (kaip raide), bei funkcija clickHandler={()=>{}} -*App.jsx faile tevinis elementas
+
+is App.jsx i Button.jsx, o kitur perduoda clickHandler mygtuka kaip funkcija su kuria gali dirbti-* function clickHandler(btn) {
+
+}
+
+
+/*Keiciama spalva *
+FormCreateTask.jsx faile (vaikas)
+export function FormCreateTask(props) {
+    const { addTaskCallback } = props;
+    const [color, setColor] = useState('#ff0000');
+
+    function handleFormSubmit(e) {
+        e.preventDefault();
+
+        if (task.trim() === '') {
+            return;
+        }
+        addTaskCallback(color);
+    }
+
+    return (
+        <form onSubmit={handleFormSubmit}>
+            <input onChange={e => setColor(e.target.value)} value={color} type="color" />
+        </form>
+    );
+}
+
+App.jsx faile (tevas)
+
+  function updateTaskColor(id, newColor) {
+    setTaskList(prev => prev.map(task => ({
+      ...task,
+      color: task.id === id ? newColor : task.color,
+    })));
+  }
+
+  return (
+    <main>
+      <TaskList data={taskList}
+        updateTaskColor={updateTaskColor}
+       />
+    </main>
+  );
+}
+
+export default App;
+
+Task.jsx faile (vaiko vaikas)
+
+export function Task(params) {
+    const { data, updateTaskText, updateTaskColor, updateTaskState, removeTask } = params;
+    const { id, text, color, state } = data;
+
+    const [inputColor, setInputColor] = useState(color);
+    const style = {
+        borderLeftColor: color ?? '#ccc',
+    };
+
+    function handleUpdate(e) {
+        e.preventDefault();
+        const cleanText = inputText.trim();
+
+        if (cleanText !== '') {
+            updateTaskText(id, cleanText);
+            updateTaskColor(id, inputColor);
+            setEditForm(false);
+        }
+    }
+
+    function handleReset() {
+        setInputText(text);
+        setInputColor(color);
+    }
+
+    function handleClear() {
+        setInputText('');
+        setInputColor('#cccccc');
+    }
+
+    return (
+        <article className="item" data-state={state === 'done' ? 'done' : ''} style={style}>
+            <form onSubmit={handleUpdate} className={editForm ? '' : 'hidden'}>
+                <input onChange={e => setInputText(e.target.value)} type="text" value={inputText} />
+                <input onChange={e => setInputColor(e.target.value)} type="color" value={inputColor} />
+                <div className="btnList">
+                    <button onClick={handleReset} className="clear" type="reset">Reset</button>
+                    <button onClick={handleClear} className="clear" type="reset">Clear</button>
+                    <button className="update" type="submit">Update</button>
+                    <button onClick={() => setEditForm(prev => false)} className="cancel" type="button">Cancel</button>
+                </div>
+            </form>
+            <div className="actions">
+                {state !== 'done' && <>
+                    <button onClick={() => updateTaskState(id)} className="done">Done</button>
+                    <div className="divider"></div>
+                    <button className="edit" onClick={() => setEditForm(prev => true)}>Edit</button>
+                </>}
+                <button onClick={handleDelete} className="delete">Delete</button>
+            </div>
+        </article>
+    );
+}
+*/
